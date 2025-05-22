@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse, render_to_response
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from .models import TaskForm, Task, UsernameForm, Username
 from django.template import RequestContext
@@ -16,7 +16,7 @@ def tasks(request):
             temp.save()
             form = TaskForm()
         tasks = Task.objects.filter(username__username=request.COOKIES.get('username')).order_by('priority')
-        return render(request, 'tasks.html', {'form': form, 'tasks': tasks, 'user': user})
+        return render(request, 'template.html', {'data': value})
     else:
         if 'username' not in request.COOKIES:
             from django.utils.crypto import get_random_string
@@ -32,7 +32,7 @@ def tasks(request):
         form = TaskForm()
         tasks = Task.objects.filter(username__username=request.COOKIES.get('username')).order_by('priority')
         user = Username.objects.filter(username=request.COOKIES.get('username'))
-    return render(request, 'tasks.html', {'form': form, 'tasks': tasks, 'user': user})
+    return render(request, 'template.html', {'data': value})
 
 def check_user_validity(request):
     '''
